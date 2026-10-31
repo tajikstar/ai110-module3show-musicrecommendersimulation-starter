@@ -27,9 +27,9 @@ This simulation is **content-based only**. There is no user behavior data, just 
 
 ### Features
 
-**`Song`** stores: `id`, `title`, `artist`, `genre`, `mood`, `energy`, `tempo_bpm`, `valence`, `danceability`, `acousticness`.
+**`Song`** stores: `id`, `title`, `artist`, `genre`, `mood`, `energy`, `tempo_bpm`, `valence`, `danceability`, `acousticness`, plus five advanced features: `popularity` (0-100), `release_decade` (1970-2020), `mood_tags` (detailed tags like "nostalgic" or "aggressive"), `instrumentalness` (0-1), and `language`.
 
-**`UserProfile`** stores the same kinds of attributes as the songs, so the two can be compared: a favorite `genre`, a favorite `mood`, and target values for `energy`, `valence`, and `tempo_bpm`.
+**`UserProfile`** stores the same kinds of attributes as the songs, so the two can be compared: a favorite `genre`, a favorite `mood`, and target values for `energy`, `valence`, and `tempo_bpm`. It can also set optional targets for the advanced features: `favorite_tags`, `target_popularity`, `target_decade`, `target_instrumentalness`, and `preferred_language`.
 
 ### Scoring rule (one song)
 
@@ -42,6 +42,13 @@ Each song gets a score between 0 and 1, which is a weighted sum:
 | Energy | `1 - abs(song - target)` | 0.25 |
 | Valence | `1 - abs(song - target)` | 0.15 |
 | Tempo | `1 - abs(song - target) / 108` (108 = range of tempos in the catalog, 60 to 168 BPM, so tempo is normalized to 0-1) | 0.10 |
+| Mood tags *(optional)* | share of the user's favorite tags that the song has | 0.10 |
+| Popularity *(optional)* | `1 - abs(song - target) / 100` | 0.05 |
+| Decade *(optional)* | `1 - abs(song - target) / 50` (1970 to 2020) | 0.05 |
+| Instrumentalness *(optional)* | `1 - abs(song - target)` | 0.05 |
+| Language *(optional)* | 1 if it matches the user's language, otherwise 0 | 0.05 |
+
+The optional rows only count when the user sets the matching target. If a target is missing, that weight is left out and the score is rescaled, so profiles without advanced preferences score exactly as before.
 
 Closeness scoring rewards songs that are *near* the user's target, not songs that simply have a higher or lower value. Genre is weighted highest because it is the broadest signal of taste, and mood is weighted lower because it is more situational.
 
@@ -313,6 +320,61 @@ Top recommendations:
      - tempo 92 vs target 120 BPM (+0.07)
 ```
 
+**Nostalgic throwback (advanced features)**. This profile also sets mood tags, popularity, decade, instrumentalness, and language.
+
+```
+=== Nostalgic throwback (advanced features) ===
+Profile: genre=country, mood=nostalgic, energy=0.5, valence=0.6, tempo=95
+Top recommendations:
+
+1. Dust Road Home by Hollis Creek - Score: 0.98
+     - genre match (+0.30)
+     - mood match (+0.20)
+     - energy 0.55 vs target 0.50 (+0.24)
+     - valence 0.68 vs target 0.60 (+0.14)
+     - tempo 98 vs target 95 BPM (+0.10)
+     - mood tags shared: nostalgic, warm (+0.10)
+     - popularity 63 vs target 60 (+0.05)
+     - decade 1990s vs target 1990s (+0.05)
+     - instrumentalness 0.06 vs target 0.10 (+0.05)
+     - language match: English (+0.05)
+2. Coffee Shop Stories by Slow Stereo - Score: 0.54
+     - energy 0.37 vs target 0.50 (+0.22)
+     - valence 0.71 vs target 0.60 (+0.13)
+     - tempo 90 vs target 95 BPM (+0.10)
+     - mood tags shared: nostalgic, warm (+0.10)
+     - popularity 49 vs target 60 (+0.04)
+     - decade 2000s vs target 1990s (+0.04)
+     - instrumentalness 0.55 vs target 0.10 (+0.03)
+     - language match: English (+0.05)
+3. Velvet Hours by Amara Lux - Score: 0.53
+     - energy 0.52 vs target 0.50 (+0.24)
+     - valence 0.72 vs target 0.60 (+0.13)
+     - tempo 86 vs target 95 BPM (+0.09)
+     - mood tags shared: warm (+0.05)
+     - popularity 77 vs target 60 (+0.04)
+     - decade 2010s vs target 1990s (+0.03)
+     - instrumentalness 0.04 vs target 0.10 (+0.05)
+     - language match: English (+0.05)
+4. Island Drift by Sun Lantern - Score: 0.49
+     - energy 0.48 vs target 0.50 (+0.24)
+     - valence 0.80 vs target 0.60 (+0.12)
+     - tempo 82 vs target 95 BPM (+0.09)
+     - mood tags shared: warm (+0.05)
+     - popularity 68 vs target 60 (+0.05)
+     - decade 2000s vs target 1990s (+0.04)
+     - instrumentalness 0.10 vs target 0.10 (+0.05)
+5. Night Drive Loop by Neon Echo - Score: 0.48
+     - energy 0.75 vs target 0.50 (+0.19)
+     - valence 0.49 vs target 0.60 (+0.13)
+     - tempo 110 vs target 95 BPM (+0.09)
+     - mood tags shared: nostalgic (+0.05)
+     - popularity 66 vs target 60 (+0.05)
+     - decade 2010s vs target 1990s (+0.03)
+     - instrumentalness 0.40 vs target 0.10 (+0.03)
+     - language match: English (+0.05)
+```
+
 **Middle of the road (edge case)**
 
 ```
@@ -376,7 +438,7 @@ What I noticed:
 - It only works on a tiny catalog (18 songs), and some genres have a single song, so a genre match can surface only one result.
 - It matches genre and mood by exact text, so "indie pop" earns nothing for a "pop" fan and "relaxed" earns nothing for a "chill" listener.
 - It uses one favorite genre and one favorite mood per user, so it cannot represent a listener with several tastes.
-- It does not use lyrics, language, artist, or any listening behavior, and it ignores `danceability` and `acousticness`.
+- It does not use lyrics, artist, or any listening behavior, and it ignores `danceability` and `acousticness`. The advanced features (tags, popularity, decade, instrumentalness, language) only count for profiles that set them.
 - Genre and mood together carry 0.50 of the score, so it can over-favor labels over how a song actually sounds.
 
 See [model_card.md](model_card.md) for more detail.

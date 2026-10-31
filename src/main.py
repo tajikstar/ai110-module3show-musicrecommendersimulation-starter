@@ -51,6 +51,18 @@ PROFILES = {
         "target_valence": 0.80,
         "target_tempo_bpm": 120,
     },
+    "Nostalgic throwback (advanced features)": {
+        "favorite_genre": "country",
+        "favorite_mood": "nostalgic",
+        "target_energy": 0.50,
+        "target_valence": 0.60,
+        "target_tempo_bpm": 95,
+        "favorite_tags": ["nostalgic", "warm"],
+        "target_popularity": 60,
+        "target_decade": 1990,
+        "target_instrumentalness": 0.10,
+        "preferred_language": "English",
+    },
     "Middle of the road (edge case)": {
         "favorite_genre": "jazz",
         "favorite_mood": "relaxed",

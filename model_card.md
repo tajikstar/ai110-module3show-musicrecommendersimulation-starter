@@ -35,7 +35,7 @@ The catalog has 18 songs in `data/songs.csv`. The starter file had 10 songs, and
 - **Genres:** pop, indie pop, lofi, rock, ambient, jazz, synthwave, hip-hop, classical, country, r&b, metal, edm, folk, reggae.
 - **Moods:** happy, chill, intense, relaxed, moody, focused, confident, peaceful, nostalgic, romantic, angry, euphoric, sad.
 
-The new songs were written by hand (with AI help) to fit each genre, so the numbers are plausible but invented. Missing from the data: lyrics, language, artist popularity, release year, and anything about how real people actually listen. Most genres have only one or two songs.
+The new songs were written by hand (with AI help) to fit each genre, so the numbers are plausible but invented. Each song also has five advanced features: popularity (0-100), release decade, detailed mood tags, instrumentalness, and language. These only affect scoring when a profile asks for them. Missing from the data: lyrics, artist popularity, and anything about how real people actually listen. Most genres have only one or two songs.
 
 ---
 
