@@ -35,7 +35,7 @@ The catalog has 18 songs in `data/songs.csv`. The starter file had 10 songs, and
 - **Genres:** pop, indie pop, lofi, rock, ambient, jazz, synthwave, hip-hop, classical, country, r&b, metal, edm, folk, reggae.
 - **Moods:** happy, chill, intense, relaxed, moody, focused, confident, peaceful, nostalgic, romantic, angry, euphoric, sad.
 
-The new songs were written by hand (with AI help) to fit each genre, so the numbers are plausible but invented. Each song also has five advanced features: popularity (0-100), release decade, detailed mood tags, instrumentalness, and language. These only affect scoring when a profile asks for them. Missing from the data: lyrics, artist popularity, and anything about how real people actually listen. Most genres have only one or two songs.
+The new songs were written together with an AI assistant to fit each genre, so the numbers are plausible but invented. Each song also has five advanced features: popularity (0-100), release decade, detailed mood tags, instrumentalness, and language. These only affect scoring when a profile asks for them. Missing from the data: lyrics, artist popularity, and anything about how real people actually listen. Most genres have only one or two songs.
 
 ---
 
@@ -110,7 +110,7 @@ The change made the results **more accurate for conflicting profiles, but not cl
 
 **Biggest learning moment.** A recommender is mostly a set of choices written as numbers. Someone decides which features count, what "close" means, and how much each feature is worth. Changing one weight was enough to change the answer for a listener with conflicting tastes. That showed me the weights are opinions, not facts.
 
-**How AI helped, and when I double-checked it.** AI helped me plan the algorithm, write the code, invent 8 extra songs, and draft the documentation. It saved a lot of time. But I had to check its work. After adding songs, the tempo range changed from 92 to 108 BPM, so the formula had to be updated. The assignment's example said a bias might come from "60% of the dataset being pop", but only 2 of my 18 songs are pop, so I wrote about the problem I actually found. I also ran the code and the tests myself instead of trusting that it worked.
+**How AI helped, and when I double-checked it.** I worked with an AI assistant the whole way. Together we planned the algorithm, wrote the code, invented 8 extra songs, and drafted the documentation. It saved a lot of time. But I still had to check the work. After adding songs, the tempo range changed from 92 to 108 BPM, so the formula had to be updated. The assignment's example said a bias might come from "60% of the dataset being pop", but only 2 of my 18 songs are pop, so I wrote about the problem I actually found. I also ran the code and the tests myself instead of trusting that it worked.
 
 **What surprised me.** A simple point system can still feel like a real recommendation. When "Sunrise City" came out on top for a happy pop fan, it felt right. The "Because:" lines made it feel even more convincing. But it is only adding up points. It does not understand music, and it keeps suggesting "Gym Hero" to people who only want happy pop.
 
