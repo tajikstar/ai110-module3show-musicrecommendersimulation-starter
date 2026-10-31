@@ -6,11 +6,13 @@
 
 ---
 
-## 2. Intended Use  
+## 2. Goal / Task, Intended Use and Non-Intended Use  
 
-VibeMatch suggests the top 5 songs from a small catalog for a listener described by a taste profile: a favorite genre, a favorite mood, and target energy, valence (how positive a song sounds), and tempo. Each suggestion comes with a short explanation of why it scored well.
+**Goal / task.** VibeMatch suggests the top 5 songs from a small catalog. It predicts which songs a listener will like. The listener is described by a taste profile: a favorite genre, a favorite mood, and target energy, valence (how positive a song sounds), and tempo. Each suggestion comes with a short explanation of why it scored well.
 
-It assumes the user can state one favorite genre and one favorite mood, and that those tastes stay the same across situations. It is built for classroom exploration of how recommenders work, not for real listeners.
+**Intended use.** This is a classroom project. It helps explore how recommenders turn data into suggestions. It assumes the user can name one favorite genre and one favorite mood. It also assumes those tastes stay the same all the time.
+
+**Non-intended use.** It should not be used for a real music app or for real listeners. The catalog is far too small. It should not be used to judge artists or to decide which music gets promoted. It should not be treated as a fair picture of anyone's taste, because it uses invented songs and a single hand-picked set of weights.
 
 ---
 
@@ -106,4 +108,10 @@ The change made the results **more accurate for conflicting profiles, but not cl
 
 ## 9. Personal Reflection  
 
-Building this showed that a recommender is mostly a set of choices written as numbers: which features count, what "close" means, and how much each feature is worth. The most interesting result was that one weight could flip what the conflicting profile received. It also made me think of real music apps as systems with opinions built in by whoever chose the features and weights.
+**Biggest learning moment.** A recommender is mostly a set of choices written as numbers. Someone decides which features count, what "close" means, and how much each feature is worth. Changing one weight was enough to change the answer for a listener with conflicting tastes. That showed me the weights are opinions, not facts.
+
+**How AI helped, and when I double-checked it.** AI helped me plan the algorithm, write the code, invent 8 extra songs, and draft the documentation. It saved a lot of time. But I had to check its work. After adding songs, the tempo range changed from 92 to 108 BPM, so the formula had to be updated. The assignment's example said a bias might come from "60% of the dataset being pop", but only 2 of my 18 songs are pop, so I wrote about the problem I actually found. I also ran the code and the tests myself instead of trusting that it worked.
+
+**What surprised me.** A simple point system can still feel like a real recommendation. When "Sunrise City" came out on top for a happy pop fan, it felt right. The "Because:" lines made it feel even more convincing. But it is only adding up points. It does not understand music, and it keeps suggesting "Gym Hero" to people who only want happy pop.
+
+**What I would try next.** I would let users have several favorite genres, give partial credit to similar genres, and add more songs. I would also try a diversity rule so the top 5 are not all alike. After that, I would try adding a "skips" signal to get a taste of collaborative filtering.
